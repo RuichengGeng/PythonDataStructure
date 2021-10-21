@@ -44,7 +44,9 @@ class ArrayQueue:
         self._data[self._front] = None
         self._front = (self._front + 1) % len(self._data)
         self._size -= 1
-        if self._size < len(self._data) // 2:
+        if self._size < len(self._data) // 4:
+            # if the real size of the queue is 4 times smaller than the data list size, resize.
+            # this is to prevent frequent resize operation
             self.resize(len(self._data) // 2)
         return res
     
@@ -63,11 +65,15 @@ def test_queue1():
     
     assert queue.dequeue() == 0
     assert queue.dequeue() == 1
-    assert len(queue._data) == 10
+    assert len(queue._data) == 20
+    
+def test_queue2():
+    queue = ArrayQueue()
+    queue.first()
     
 
 if __name__ == '__main__':
     test_queue1()
-
+    test_queue2()
 
 
