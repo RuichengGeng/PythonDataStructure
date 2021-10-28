@@ -50,7 +50,28 @@ class SingleLinkedList:
             this = this.next
         if change == False:
             print("No target value : {} in linked list".format(target))
+    
+    def remove_element(self,target):
+        while self._head.element == target:
+            self._head = self._head.next
+            self._size -= 1
+            print("Remove {} from head".format(target))
+            if self._head is None:
+                return 
+        
+        thisNode = self._head
+        nextNode = thisNode.next
+        while nextNode is not None:
+            if nextNode.element == target:
+                thisNode.next = nextNode.next
+                print("Remove {} from single linked list".format(target))
+                self._size -= 1
+                nextNode = thisNode.next
+            else:
+                thisNode = thisNode.next
+                nextNode = thisNode.next
                 
+
     def __iter__(self):
         this = self._head
         while this is not None:
@@ -58,7 +79,7 @@ class SingleLinkedList:
             this = this.next
             yield value
 
-def test_SingleLinkedList():
+def test_SingleLinkedList1():
     sll = SingleLinkedList()
     for i in range(10):
         sll.add_first(i)
@@ -66,10 +87,23 @@ def test_SingleLinkedList():
         sll.remove_first()
     for _ in range(3):
         sll.insert_element(4,10)
-    
+        
+    sll.remove_element(4)
+    for i in sll:
+        print(i)
+        
+    sll.remove_element(10)
+    for i in sll:
+        print(i)
+
+def test_SingleLinkedList2():
+    sll = SingleLinkedList()
+    for _ in range(10):
+        sll.add_first(10)
+    sll.remove_element(10)
     for i in sll:
         print(i)
 
 if __name__ == '__main__':
-    test_SingleLinkedList()
-    
+    test_SingleLinkedList1()
+    test_SingleLinkedList2()
