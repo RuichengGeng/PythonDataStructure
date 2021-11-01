@@ -116,7 +116,7 @@ class SortedPriorityQueue(PriorityQueueBase):
         else:
             insert = 0
             for node in self._data:
-                if (node._element.key < item.key) and (insert == 0):
+                if (node._element < item) and (insert == 0):
                     self._data._insert_between(item,node._prev,node)
                     insert = 1
             if insert == 0:
@@ -137,7 +137,7 @@ class SortedPriorityQueue(PriorityQueueBase):
 
 def test_SortedPriorityQueue():
     q = SortedPriorityQueue()
-    for _ in range(10):
+    for _ in range(15):
         q.add(random.randint(a= 0,b = 10),0)
     while not q.is_empty():
         print(q.remove_min())
