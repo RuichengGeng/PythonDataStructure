@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct 28 15:57:17 2021
+Created on Mon Nov  1 09:00:09 2021
 
 @author: Ruich
 """
+
+'''sorted priority queue implement by double linked list'''
+from PriorityQueueBase import PriorityQueueBase
+from PriorityQueueBase import _Item
+import random
+
 class Empty(Exception):
     pass
 
@@ -54,29 +60,21 @@ class _DoubleLinkedBase:
         element = node._element
         node._prev,node._element,node._next = None,None,None # deprecate the node
         return element
-    
-    def __iter__(self):
-        if self.is_empty():
-            raise Empty("Empty double linked list")
-        thisNode = self._head()
-        while not thisNode.is_na():
-            temp = thisNode
-            thisNode = thisNode._next
-            yield temp
 
 
-class LinkedDequeue(_DoubleLinkedBase):
-    '''double end queue based on double linked list'''
+class DoubleLinkedList(_DoubleLinkedBase):
     def __init__(self):
         super().__init__()
-    
+        
     def first(self):
         if self.is_empty():
-            raise Empty("Empty queue")
+            raise Empty("Empty list")
+        return self._head._next
     
     def last(self):
         if self.is_empty():
-            raise Empty("Empty queue")
+            raise Empty("Empty list")
+        return self._trailer._prev
             
     def insert_first(self,element):
         self._insert_between(element,self._head,self._head._next)
@@ -86,21 +84,66 @@ class LinkedDequeue(_DoubleLinkedBase):
         
     def delete_first(self):
         if self.is_empty():
-            raise Empty("Empty queue")
+            raise Empty("Empty list")
         return self._delete_between(self._head._next)
     
     def delete_last(self):
         if self.is_empty():
-            raise Empty("Empty queue")
+            raise Empty("Empty list")
         return self._delete_between(self._trailer._prev)
 
-def test_dequeue():
-    q = LinkedDequeue()
-    for i in range(10):
-        q.insert_first(i)
-    q.insert_first(-1)
-    while len(q) > 0:
-        print(q.delete_last())
+    def __iter__(self):
+        if self.is_empty():
+            raise Empty("Empty double linked list")
+        thisNode = self._head._next ## notice the head of the list is None
+        while not thisNode.is_na():
+            yield thisNode
+            thisNode = thisNode._next
+
+
+class SortedPriorityQueue(PriorityQueueBase):
+    '''head to tail,small to big'''
+    def __init__(self):
+        self._data = DoubleLinkedList()
         
+    def __len__(self):
+        return len(self._data)
+    
+    def add(self,key,value):
+        item = _Item(key,value)
+        if self.is_empty():
+            self._data.insert_first(item)
+        else:
+            insert = 0
+            for node in self._data:
+                if (node._element.key < item.key) and (insert == 0):
+                    self._data._insert_between(item,node._prev,node)
+                    insert = 1
+            if insert == 0:
+                self._data.insert_last(item)
+    
+    def get_min(self):
+        if self.is_empty():
+            assert Empty("Empty queue")
+        p = self._data.first()
+        return (p.key,p.value)
+    
+    def remove_min(self):
+        if self.is_empty():
+            assert Empty("Empty queue")
+        p = self._data.delete_first()
+        return (p.key,p.value)
+
+
+def test_SortedPriorityQueue():
+    q = SortedPriorityQueue()
+    for _ in range(10):
+        q.add(random.randint(a= 0,b = 10),0)
+    while not q.is_empty():
+        print(q.remove_min())
+
 if __name__ == '__main__':
-    test_dequeue()
+    test_SortedPriorityQueue()
+
+
+
