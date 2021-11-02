@@ -62,10 +62,17 @@ class Heap(PriorityQueueBase):
             if small_child < self._data[p]:
                 self._swap(p,small_idx)
                 self._heap_down(small_idx)
-                
+    
+    def _heapify(self):
+        start = self._parent(len(self._data) - 1) ## the biggest index of non-leave node
+        for i in range(start,-1,-1): ## do downheap from bottom to top
+            self._heap_down(i)
     #---------------------- publice behavior
-    def __init__(self):
-        self._data = []
+    def __init__(self,contents = None):
+        if contents is not None:
+            self._data = [_Item(k,v) for k,v in contents]
+        else:
+            self._data = []
         
     def __len__(self):
         return len(self._data)
