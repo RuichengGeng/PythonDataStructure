@@ -71,6 +71,7 @@ class Heap(PriorityQueueBase):
     def __init__(self,contents = None):
         if contents is not None:
             self._data = [_Item(k,v) for k,v in contents]
+            self._heapify()
         else:
             self._data = []
         
