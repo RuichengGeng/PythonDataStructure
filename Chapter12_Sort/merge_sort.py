@@ -34,6 +34,7 @@ def merge_sort(arr):
     merge_sort(arr1)
     merge_sort(arr2)
     merge(arr1,arr2,arr)
+    return arr
     
 def bubble_sort(arr):
     for i in range(1, len(arr)):
@@ -46,7 +47,7 @@ def test_merge_sort():
     arr = []
     for _ in range(100):
         arr.append(random.randint(0,100))
-    merge_sort(arr)
+    arr = merge_sort(arr)
     return arr
 
 def compare_sort():
@@ -71,3 +72,4 @@ def compare_sort():
 if __name__ == '__main__':
     # arr = test_merge_sort()
     compare_sort()
+    arr = test_merge_sort()
